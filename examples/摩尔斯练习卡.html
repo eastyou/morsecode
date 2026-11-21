@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>摩尔斯练习卡</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #e2e8f0;
+    color: #0f172a;
+    padding: 7mm 0 10mm;
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  }
+  .toolbar {
+    width: 210mm;
+    max-width: calc(100% - 20px);
+    margin: 0 auto 5mm;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    color: #334155;
+    font-size: 13px;
+  }
+  .toolbar strong { font-size: 15px; letter-spacing: 1px; }
+  .toolbar span { color: #64748b; font-size: 12px; }
+  .sheet {
+    width: 210mm;
+    max-width: 100%;
+    height: 297mm;
+    margin: 0 auto 7mm;
+    padding: 10mm 12mm;
+    background: #fff;
+    box-shadow: 0 6px 22px rgba(15, 23, 42, 0.14);
+    display: flex;
+    flex-direction: column;
+    gap: 4mm;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+  }
+  .sheet:last-child { page-break-after: auto; break-after: auto; }
+  .sheet-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding-bottom: 2.5mm;
+    border-bottom: 0.5mm solid #0f172a;
+  }
+  .sheet-head .brand {
+    font-size: 8pt;
+    letter-spacing: 1.6pt;
+    color: #64748b;
+  }
+  .sheet-head h1 {
+    margin: 0;
+    font-size: 15pt;
+    font-weight: 600;
+    letter-spacing: 2pt;
+    text-align: center;
+  }
+  .sheet-head .page-no { font-size: 8pt; color: #64748b; white-space: nowrap; }
+  .card {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 4mm 6mm;
+    border: 0.5mm solid #334155;
+    border-radius: 2.5mm;
+  }
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-top .no {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 11mm;
+    height: 11mm;
+    border-radius: 50%;
+    background: #0f172a;
+    color: #fff;
+    font-size: 12pt;
+    font-weight: 600;
+  }
+  .card-top .badge {
+    font-size: 7.5pt;
+    letter-spacing: 1.5pt;
+    color: #94a3b8;
+  }
+  .word {
+    margin: 3mm 0 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 32pt;
+    font-weight: 700;
+    letter-spacing: 3pt;
+    line-height: 1.15;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  .write {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10mm;
+    padding: 0 0 2mm;
+  }
+  .write .line {
+    display: block;
+    height: 0;
+    border-bottom: 0.35mm dashed #94a3b8;
+  }
+  .prompt {
+    margin: 0;
+    font-size: 8pt;
+    color: #64748b;
+    letter-spacing: 0.3pt;
+  }
+  .answer-sheet { gap: 3mm; }
+  .answer-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding-bottom: 2.5mm;
+    border-bottom: 0.5mm solid #0f172a;
+  }
+  .answer-head h2 {
+    margin: 0;
+    font-size: 15pt;
+    font-weight: 600;
+    letter-spacing: 1.5pt;
+  }
+  .answer-head span { font-size: 8pt; color: #64748b; white-space: nowrap; }
+  .answers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6mm 8mm;
+    align-content: start;
+  }
+  .answers li {
+    display: grid;
+    grid-template-columns: 9mm 27mm minmax(0, 1fr);
+    align-items: baseline;
+    gap: 1.5mm;
+    padding: 1.6mm 0;
+    border-bottom: 0.2mm dotted #cbd5e1;
+    font-size: 9pt;
+  }
+  .answers .no { color: #94a3b8; font-size: 8pt; }
+  .answers .aw {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    letter-spacing: 0.5pt;
+    overflow-wrap: anywhere;
+  }
+  .answers code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 8.5pt;
+    color: #1e293b;
+    letter-spacing: 0.4pt;
+    overflow-wrap: anywhere;
+  }
+  .answer-tip {
+    margin: auto 0 0;
+    font-size: 8pt;
+    color: #64748b;
+    border-top: 0.2mm solid #e2e8f0;
+    padding-top: 2mm;
+  }
+  @page { size: A4 portrait; margin: 0; }
+  @media screen and (max-width: 850px) {
+    body { padding: 10px 0 24px; }
+    .sheet {
+      width: 100%;
+      height: auto;
+      margin: 0 0 14px;
+      padding: 18px 16px;
+      box-shadow: none;
+      border-radius: 0;
+    }
+    .card { min-height: 175px; }
+    .word { font-size: 26pt; }
+    .answers { grid-template-columns: 1fr; }
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .toolbar { display: none; }
+    .sheet { margin: 0; box-shadow: none; border-radius: 0; }
+    .card { break-inside: avoid; page-break-inside: avoid; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="toolbar"><strong>摩尔斯练习卡</strong><span>共 12 题 · 12 张练习卡 · 4 页</span></div>
+<section class="sheet"><header class="sheet-head"><span class="brand">MORSE CODE</span><h1>摩尔斯练习卡</h1><span class="page-no">第 1 / 4 页</span></header><article class="card"><div class="card-top"><span class="no">01</span><span class="badge">MORSE</span></div><div class="word">DREAM</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article><article class="card"><div class="card-top"><span class="no">02</span><span class="badge">MORSE</span></div><div class="word">BREAD</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article><article class="card"><div class="card-top"><span class="no">03</span><span class="badge">MORSE</span></div><div class="word">NUMBER</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article></section>
+<section class="sheet"><header class="sheet-head"><span class="brand">MORSE CODE</span><h1>摩尔斯练习卡</h1><span class="page-no">第 2 / 4 页</span></header><article class="card"><div class="card-top"><span class="no">04</span><span class="badge">MORSE</span></div><div class="word">EAGLE</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article><article class="card"><div class="card-top"><span class="no">05</span><span class="badge">MORSE</span></div><div class="word">WORLD</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article><article class="card"><div class="card-top"><span class="no">06</span><span class="badge">MORSE</span></div><div class="word">CLOCK</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article></section>
+<section class="sheet"><header class="sheet-head"><span class="brand">MORSE CODE</span><h1>摩尔斯练习卡</h1><span class="page-no">第 3 / 4 页</span></header><article class="card"><div class="card-top"><span class="no">07</span><span class="badge">MORSE</span></div><div class="word">ROBOT</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article><article class="card"><div class="card-top"><span class="no">08</span><span class="badge">MORSE</span></div><div class="word">CASTLE</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article><article class="card"><div class="card-top"><span class="no">09</span><span class="badge">MORSE</span></div><div class="word">PROGRAM</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article></section>
+<section class="sheet"><header class="sheet-head"><span class="brand">MORSE CODE</span><h1>摩尔斯练习卡</h1><span class="page-no">第 4 / 4 页</span></header><article class="card"><div class="card-top"><span class="no">10</span><span class="badge">MORSE</span></div><div class="word">TEACHER</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article><article class="card"><div class="card-top"><span class="no">11</span><span class="badge">MORSE</span></div><div class="word">MUSIC</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article><article class="card"><div class="card-top"><span class="no">12</span><span class="badge">MORSE</span></div><div class="word">CAMERA</div><div class="write"><span class="line"></span><span class="line"></span></div><p class="prompt">把单词写成摩尔斯电码，字母之间空一格</p></article></section>
+<section class="sheet answer-sheet"><header class="answer-head"><h2>摩尔斯练习卡 · 参考答案</h2><span>共 12 题 · 答案页</span></header><ol class="answers"><li><span class="no">01</span><span class="aw">DREAM</span><code>-.. .-. . .- --</code></li><li><span class="no">02</span><span class="aw">BREAD</span><code>-... .-. . .- -..</code></li><li><span class="no">03</span><span class="aw">NUMBER</span><code>-. ..- -- -... . .-.</code></li><li><span class="no">04</span><span class="aw">EAGLE</span><code>. .- --. .-.. .</code></li><li><span class="no">05</span><span class="aw">WORLD</span><code>.-- --- .-. .-.. -..</code></li><li><span class="no">06</span><span class="aw">CLOCK</span><code>-.-. .-.. --- -.-. -.-</code></li><li><span class="no">07</span><span class="aw">ROBOT</span><code>.-. --- -... --- -</code></li><li><span class="no">08</span><span class="aw">CASTLE</span><code>-.-. .- ... - .-.. .</code></li><li><span class="no">09</span><span class="aw">PROGRAM</span><code>.--. .-. --- --. .-. .- --</code></li><li><span class="no">10</span><span class="aw">TEACHER</span><code>- . .- -.-. .... . .-.</code></li><li><span class="no">11</span><span class="aw">MUSIC</span><code>-- ..- ... .. -.-.</code></li><li><span class="no">12</span><span class="aw">CAMERA</span><code>-.-. .- -- . .-. .-</code></li></ol><p class="answer-tip">对照答案时注意：字母之间空一格，单词之间用 / 分隔。</p></section>
+</body>
+</html>
